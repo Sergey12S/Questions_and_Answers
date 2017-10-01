@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>Список вопросов</h1><br/>
+
+    <form action="">
+        <!--{{ form }}-->
+        {{ form.errors }}
+        {{ form.search.label_tag }}
+        {{ form.search }}
+        {{ form.sort_field }}
+        <!--{{ form.sort_field.errors }}-->
+        <input type="submit">
+    </form><br/>
+
+    {% for question in object_list %}
+        <b>{{ question.created_at }}</b> {{ question.author }}
+    <a href="{% url 'question_detail' pk=question.id %}">{{ question.title }}</a><br/>
+    {% endfor %}
+{% endblock %}
