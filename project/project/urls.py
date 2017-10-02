@@ -16,12 +16,13 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
-from questions.views import SignIn
+from questions.views import SignUp, Index
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$|index/', Index.as_view()),
     url(r'^questions/', include('questions.urls')),
     url(r'^login/', login, {'template_name': 'login.html'}),
     url(r'^logout/', logout),
-    url(r'^signin/', SignIn.as_view()),
+    url(r'^signup/', SignUp.as_view()),
 ]

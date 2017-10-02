@@ -2,20 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BASE</title>
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
 </head>
 <body>
+    <div class="container">
 
-    {% if user.is_authenticated %}
-        {{ user }}
-        <form action="/logout/" method="post">
-            {% csrf_token %}
-            <input type="submit" value="выйти">
-        </form>
-    {% else %}
-        <a href="/login/">Войти</a>   <a href="/signin/">Регистрация</a>
-    {% endif %}
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/index/">На главную</a></li>
+                    <li><a href="/questions/">Все вопросы</a></li>
+                    <li><a href="/questions/create/">Задать вопрос</a></li>
+                </ul>
+            </nav>
+            <div class="loginsignuplogout">
+                {% if user.is_authenticated %}
+                    {{ user }}
+                    <form action="/logout/" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="выйти">
+                    </form>
+                {% else %}
+                    <a href="/login/">Войти</a>   <a href="/signup/">Регистрация</a>
+                {% endif %}
+            </div>
+        </header>
 
-    {% block content %}{% endblock %}
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+
+        <footer></footer>
+    </div>
 </body>
 </html>

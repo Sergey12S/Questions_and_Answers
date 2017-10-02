@@ -32,7 +32,7 @@ class QForm(forms.ModelForm):
 """
 
 
-class SignInForm(UserCreationForm):
+class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User

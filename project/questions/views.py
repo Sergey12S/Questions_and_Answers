@@ -1,15 +1,21 @@
 from .models import Question
 from django.views.generic import ListView, DetailView, CreateView
-from .forms import QuestionListForm, QuesForm, SignInForm
+from .forms import QuestionListForm, QuesForm, SignUpForm
 from django.shortcuts import resolve_url
 from django.contrib.auth.models import User
 
 
-class SignIn(CreateView):
+class Index(ListView):
+
+    model = Question
+    template_name = "index.html"
+
+
+class SignUp(CreateView):
 
     model = User
-    template_name = "sign_in.html"
-    form_class = SignInForm
+    template_name = "sign_up.html"
+    form_class = SignUpForm
     success_url = "/questions/"
 
 
