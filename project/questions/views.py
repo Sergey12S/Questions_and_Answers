@@ -1,26 +1,24 @@
 from .models import Question
 from django.views.generic import ListView, DetailView, CreateView
-from .forms import QuestionListForm, QuesForm, SignUpForm
+from .forms import QuestionListForm, SignUpForm
+# from .forms import QuesForm
 from django.shortcuts import resolve_url
 from django.contrib.auth.models import User
 
 
 class Index(ListView):
-
     model = Question
     template_name = "index.html"
 
 
 class SignUp(CreateView):
-
     model = User
     template_name = "sign_up.html"
     form_class = SignUpForm
-    success_url = "/questions/"
+    success_url = "/index/"
 
 
 class QuestionCreate(CreateView):
-
     model = Question
     template_name = "question_create.html"
     fields = ('title', 'text')
@@ -34,33 +32,32 @@ class QuestionCreate(CreateView):
 
 
 class QuestionDetail(DetailView):
-
     template_name = "question_detail.html"
     model = Question
 
 
 class QuestionList(ListView):
-
     template_name = "question_list.html"
     model = Question
+    paginate_by = 20
 
     def dispatch(self, request, *args, **kwargs):
         self.form = QuestionListForm(request.GET)
         self.form.is_valid()
-        self.qform = QuesForm(request.POST or None)
+        # self.qform = QuesForm(request.POST or None)
         return super(QuestionList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        #queryset = Question.objects.filter(author=self.request.user)Показывает вопросы залогиненого юзера
+        # queryset = Question.objects.filter(author=self.request.user)Показывает вопросы залогиненого юзера
         queryset = Question.objects.all()
         if self.form.cleaned_data.get('search'):
             queryset = queryset.filter(title=self.form.cleaned_data['search'])
         if self.form.cleaned_data.get('sort_field'):
-            queryset = queryset.order_by(self.form.cleaned_data['sort_field'])[:10]
+            queryset = queryset.order_by(self.form.cleaned_data['sort_field'])
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super(QuestionList, self).get_context_data(**kwargs)
         context['form'] = self.form
-        context['qform'] = self.qform
+        # context['qform'] = self.qform
         return context

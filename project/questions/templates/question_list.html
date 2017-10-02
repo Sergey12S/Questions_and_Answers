@@ -16,7 +16,20 @@
     </form><br/>
 
     {% for question in object_list %}
-        <b>{{ question.created_at }}</b> {{ question.author }}
+        <b>{{ question.created_at }}</b> {{ question.author }} {{ question.rating }}
     <a href="{% url 'question_detail' pk=question.id %}">{{ question.title }}</a><br/>
-    {% endfor %}
+    {% endfor %}<br/>
+
+
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+        {% endif %}
+            страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+        {% endif %}
+    {% endif %}
+
+
 {% endblock %}
