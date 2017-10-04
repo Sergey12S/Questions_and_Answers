@@ -2,6 +2,14 @@ from django import forms
 from .models import Question
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from answers.models import Answer
+
+
+class AnswerAdd(forms.ModelForm):  # !
+
+    class Meta:
+        model = Answer
+        fields = ('text',)
 
 
 class QuestionListForm(forms.Form):
@@ -13,7 +21,7 @@ class QuestionListForm(forms.Form):
     """
     def clean_search(self):
         search = self.cleaned_data.get('search')
-        raise forms.ValidationError(u'Я не правильный поиск!')
+        raise forms.ValidationError(u'Я неправильный поиск!')
         return search
     """
 

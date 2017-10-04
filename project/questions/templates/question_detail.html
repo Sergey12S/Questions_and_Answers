@@ -7,5 +7,20 @@
     {{ question.title }}<br/>
     {{ question.text }}<br/>
     {{ question.author }}<br/>
-    {{ question.rating }}
+    {{ question.rating }}<br/><br/>
+
+    {% if request.user.is_authenticated %}
+    <h2>Добавить комментарий:</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit">
+    </form>
+    {% else %} <h3>Для добавления комментария войдите в учетную запись!</h3>
+    {% endif %}
+
+    <h2>Все комментарии:</h2>
+    {% for answer in answers %}
+        {{ answer.text }}   {{ answer.author }}   {{ answer.created_at }}<br/>
+    {% endfor %}
 {% endblock %}

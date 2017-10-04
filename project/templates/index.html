@@ -3,7 +3,11 @@
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
-
-
+<br/>
+<h1>Популярные вопросы:</h1>
+{% for q in object_list %}
+    {{ q.author }} {{ q.rating }}
+    <a href="{% url 'question_detail' pk=q.id %}">{{ q.title }}</a><br/>
+{% endfor %}
 
 {% endblock %}

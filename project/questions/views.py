@@ -1,17 +1,15 @@
 from .models import Question
+from answers.models import Answer
 from django.views.generic import ListView, DetailView, CreateView
-from .forms import QuestionListForm, SignUpForm
+from .forms import QuestionListForm, SignUpForm, AnswerAdd
 # from .forms import QuesForm
-from django.shortcuts import resolve_url
+from django.shortcuts import resolve_url, redirect
 from django.contrib.auth.models import User
-
-
-class Index(ListView):
-    model = Question
-    template_name = "index.html"
+from django.contrib.auth.decorators import login_required
 
 
 class SignUp(CreateView):
+    """Страница регистрации"""
     model = User
     template_name = "sign_up.html"
     form_class = SignUpForm
@@ -19,6 +17,7 @@ class SignUp(CreateView):
 
 
 class QuestionCreate(CreateView):
+    """Страница создания вопроса"""
     model = Question
     template_name = "question_create.html"
     fields = ('title', 'text')
@@ -32,11 +31,33 @@ class QuestionCreate(CreateView):
 
 
 class QuestionDetail(DetailView):
+    """Детальная страница с вопросом и ответами"""
     template_name = "question_detail.html"
     model = Question
 
+    def dispatch(self, request, *args, **kwargs):
+        question = Question.objects.get(pk=self.kwargs['pk'])
+        self.form = AnswerAdd(request.POST)
+        try:
+            if self.form.is_valid():
+                answer = self.form.save(commit=False)
+                answer.author = request.user
+                answer.question = question
+                answer.save()
+                return redirect('question_detail', pk=question.pk)
+        except:
+             return redirect('question_detail', pk=question.pk)
+        return super(QuestionDetail, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionDetail, self).get_context_data(**kwargs)
+        context['answers'] = Answer.objects.filter(question=self.kwargs['pk']).order_by('-created_at')
+        context['form'] = self.form
+        return context
+
 
 class QuestionList(ListView):
+    """Страница со всеми вопросами"""
     template_name = "question_list.html"
     model = Question
     paginate_by = 20
@@ -61,3 +82,12 @@ class QuestionList(ListView):
         context['form'] = self.form
         # context['qform'] = self.qform
         return context
+
+
+class Index(QuestionList):
+    """Главная страница"""
+    model = Question
+    template_name = "index.html"
+
+    def get_queryset(self):
+        return super(Index, self).get_queryset().exclude(rating__lt=10)
