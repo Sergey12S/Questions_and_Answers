@@ -16,8 +16,9 @@
     </form><br/>
 
     {% for question in object_list %}
-        <b>{{ question.created_at }}</b> {{ question.author }} {{ question.rating }}
-    <a href="{% url 'question_detail' pk=question.id %}">{{ question.title }}</a><br/>
+        {{ question.category }}  <b>{{ question.created_at }}</b> {{ question.author }} Рейтинг: {{ question.rating }}
+    <a href="{% url 'question_detail' pk=question.id %}">{{ question.title }}</a>
+    Кол-во ответов: {{ question.answers_count }}<br/>
     {% endfor %}<br/>
 
 

@@ -8,6 +8,7 @@
     {{ question.text }}<br/>
     {{ question.author }}<br/>
     {{ question.rating }}<br/><br/>
+    {{ question.category }}<br/>
 
     {% if request.user.is_authenticated %}
     <h2>Добавить комментарий:</h2>

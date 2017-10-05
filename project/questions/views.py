@@ -6,6 +6,7 @@ from .forms import QuestionListForm, SignUpForm, AnswerAdd
 from django.shortcuts import resolve_url, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 
 
 class SignUp(CreateView):
@@ -20,7 +21,7 @@ class QuestionCreate(CreateView):
     """Страница создания вопроса"""
     model = Question
     template_name = "question_create.html"
-    fields = ('title', 'text')
+    fields = ('title', 'text', 'category')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -75,6 +76,7 @@ class QuestionList(ListView):
             queryset = queryset.filter(title=self.form.cleaned_data['search'])
         if self.form.cleaned_data.get('sort_field'):
             queryset = queryset.order_by(self.form.cleaned_data['sort_field'])
+        queryset = queryset.annotate(answers_count=Count('answers__id'))
         return queryset
 
     def get_context_data(self, **kwargs):
