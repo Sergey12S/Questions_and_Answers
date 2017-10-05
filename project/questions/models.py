@@ -17,3 +17,15 @@ class Question(models.Model):
         verbose_name = u'Вопрос'
         verbose_name_plural = u'Вопросы'
         ordering = ('-created_at', )
+
+
+class Answer(models.Model):
+
+    question = models.ForeignKey(Question, related_name='answers')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    class Meta:
+        verbose_name = u'Ответ'
+        verbose_name_plural = u'Ответы'

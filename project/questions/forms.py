@@ -2,7 +2,7 @@ from django import forms
 from .models import Question
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from answers.models import Answer
+from .models import Answer
 
 
 class AnswerAdd(forms.ModelForm):  # !

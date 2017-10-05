@@ -1,5 +1,5 @@
 from .models import Question
-from answers.models import Answer
+from .models import Answer
 from django.views.generic import ListView, DetailView, CreateView
 from .forms import QuestionListForm, SignUpForm, AnswerAdd
 # from .forms import QuesForm
