@@ -1,6 +1,6 @@
 from .models import Question
 from .models import Answer
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import QuestionListForm, SignUpForm, AnswerAdd
 # from .forms import QuesForm
 from django.shortcuts import resolve_url, redirect
@@ -29,6 +29,28 @@ class QuestionCreate(CreateView):
 
     def get_success_url(self):
         return resolve_url('question_detail', pk=self.object.pk)
+
+
+class QuestionUpdate(UpdateView):
+
+    template_name = "question_update.html"
+    model = Question
+    fields = ('category', 'title', 'text')
+
+    def get_queryset(self):
+        return super(QuestionUpdate, self).get_queryset().filter(author=self.request.user)
+
+    def get_success_url(self):
+        return resolve_url('question_detail', pk=self.object.pk)
+
+
+class QuestionDelete(DeleteView):
+    model = Question
+    template_name = "question_delete.html"
+    success_url = '/index/'
+
+    def get_queryset(self):
+        return super(QuestionDelete, self).get_queryset().filter(author=self.request.user)
 
 
 class QuestionDetail(DetailView):
@@ -93,3 +115,4 @@ class Index(QuestionList):
 
     def get_queryset(self):
         return super(Index, self).get_queryset().exclude(rating__lt=10)
+

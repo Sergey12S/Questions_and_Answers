@@ -3,7 +3,11 @@
 {% block title %}Страница вопроса{% endblock %}
 
 {% block content %}
-    <h1>Вопрос</h1><br/>
+    <h1>Вопрос</h1>
+    {% if request.user == question.author %}
+        <a href="{% url 'question_update' pk=question.id %}">Редактировать</a><br/>
+        <a href="{% url 'question_delete' pk=question.id %}">Удалить вопрос</a><br/>
+    {% endif %}<br/>
     {{ question.title }}<br/>
     {{ question.text }}<br/>
     {{ question.author }}<br/>

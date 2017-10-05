@@ -15,7 +15,7 @@ class AnswerAdd(forms.ModelForm):  # !
 class QuestionListForm(forms.Form):
 
     search = forms.CharField(required=False)
-    sort_field = forms.ChoiceField(choices=(('-answers_count', u'Кол-во ответов'), ('-created_at', 'Новые'),
+    sort_field = forms.ChoiceField(choices=(('-answers_count', u'Кол-во ответов'), ('-created_at', u'Новые'),
                                             ('created_at', u'Старые'), ('title', u'Заголовок'),
                                             ('category', u'Категория')), required=False)
 
