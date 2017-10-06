@@ -131,3 +131,14 @@ class CategoriesDetail(DetailView):
         context = super(CategoriesDetail, self).get_context_data(**kwargs)
         context['questions'] = Question.objects.filter(categories=self.kwargs['pk']).order_by('-created_at')
         return context
+
+
+class QuestionCommentAjax(DetailView):
+    """"""
+    model = Question
+    template_name = "question_comment_ajax.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionCommentAjax, self).get_context_data(**kwargs)
+        context['answers'] = Answer.objects.filter(question=self.kwargs['pk']).order_by('-created_at')
+        return context

@@ -29,7 +29,13 @@
     {% endif %}
 
     <h2>Все комментарии:</h2>
-    {% for answer in answers %}
-        {{ answer.text }}   {{ answer.author }}   {{ answer.created_at }}<br/>
-    {% endfor %}
+    <div id="comments">
+
+    </div>
+    <script>
+        function load_comments() {
+            $('#comments').load('{% url 'question_comments' pk=question.pk %}');
+        };
+        window.setInterval(load_comments, 1000);
+    </script>
 {% endblock %}

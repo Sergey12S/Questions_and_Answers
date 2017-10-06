@@ -1,6 +1,5 @@
 from django.conf.urls import url
-from .views import QuestionList, QuestionDetail, QuestionCreate, QuestionUpdate, QuestionDelete
-from .views import CategoriesList, CategoriesDetail
+from questions.views import *
 from django.contrib.auth.decorators import login_required
 
 
@@ -12,4 +11,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/delete/$', QuestionDelete.as_view(), name='question_delete'),
     url(r'^categories/$', CategoriesList.as_view(), name='categories_list'),
     url(r'^categories/(?P<pk>\d+)/$', CategoriesDetail.as_view(), name='categories_detail'),
+    url(r'^(?P<pk>\d+)/ajax/$', QuestionCommentAjax.as_view(), name='question_comments'),
 ]
