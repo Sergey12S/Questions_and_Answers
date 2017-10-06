@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Страница вопроса{% endblock %}
+{% block title %}{{ question.title }}{% endblock %}
 
 {% block content %}
     <h1>Вопрос</h1>
@@ -12,7 +12,11 @@
     {{ question.text }}<br/>
     {{ question.author }}<br/>
     {{ question.rating }}<br/><br/>
-    {{ question.category }}<br/>
+    <p> Категории: <br/>
+        {% for category in question.categories.all %}
+            <a href="{% url 'categories_detail' pk=category.id %}">{{ category }}</a><br/>
+        {% endfor %}
+    </p><br/>
 
     {% if request.user.is_authenticated %}
     <h2>Добавить комментарий:</h2>

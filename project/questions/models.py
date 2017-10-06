@@ -21,7 +21,7 @@ class Question(models.Model):
     text = models.TextField(verbose_name=u'описание')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=u'дата создания')
     rating = models.PositiveIntegerField(default=0, verbose_name=u'рейтинг')
-    category = models.ForeignKey(Category)
+    categories = models.ManyToManyField(Category, related_name='questions')
 
     def __unicode__(self):
         return self.title

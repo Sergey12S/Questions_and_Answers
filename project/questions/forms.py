@@ -5,7 +5,14 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Answer
 
 
-class AnswerAdd(forms.ModelForm):  # !
+class SignUpForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+
+
+class AnswerAdd(forms.ModelForm):
 
     class Meta:
         model = Answer
@@ -17,7 +24,7 @@ class QuestionListForm(forms.Form):
     search = forms.CharField(required=False)
     sort_field = forms.ChoiceField(choices=(('-answers_count', u'Кол-во ответов'), ('-created_at', u'Новые'),
                                             ('created_at', u'Старые'), ('title', u'Заголовок'),
-                                            ('category', u'Категория')), required=False)
+                                            ('-rating', u'Рейтинг')), required=False)
 
     """
     def clean_search(self):
@@ -33,17 +40,3 @@ class QuesForm(forms.Form):
     title = forms.CharField(max_length=255)
     text = forms.CharField(widget=forms.Textarea)
 """
-
-"""   ИЛИ ИСПОЛЬЗУЕМ
-class QForm(forms.ModelForm):
-
-    class Meta:
-        model = Question
-"""
-
-
-class SignUpForm(UserCreationForm):
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password1', 'password2')

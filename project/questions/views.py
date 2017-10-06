@@ -1,8 +1,6 @@
-from .models import Question
-from .models import Answer
+from .models import Question, Answer, Category
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import QuestionListForm, SignUpForm, AnswerAdd
-# from .forms import QuesForm
 from django.shortcuts import resolve_url, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -21,7 +19,7 @@ class QuestionCreate(CreateView):
     """Страница создания вопроса"""
     model = Question
     template_name = "question_create.html"
-    fields = ('title', 'text', 'category')
+    fields = ('title', 'text', 'categories')
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -32,10 +30,10 @@ class QuestionCreate(CreateView):
 
 
 class QuestionUpdate(UpdateView):
-
+    """Страница изменения вопроса"""
     template_name = "question_update.html"
     model = Question
-    fields = ('category', 'title', 'text')
+    fields = ('categories', 'title', 'text')
 
     def get_queryset(self):
         return super(QuestionUpdate, self).get_queryset().filter(author=self.request.user)
@@ -45,6 +43,7 @@ class QuestionUpdate(UpdateView):
 
 
 class QuestionDelete(DeleteView):
+    """Страница удаления вопроса"""
     model = Question
     template_name = "question_delete.html"
     success_url = '/index/'
@@ -116,3 +115,19 @@ class Index(QuestionList):
     def get_queryset(self):
         return super(Index, self).get_queryset().exclude(rating__lt=10)
 
+
+class CategoriesList(ListView):
+    """Страница со списком категорий"""
+    model = Category
+    template_name = "categories_list.html"
+
+
+class CategoriesDetail(DetailView):
+    """Страница категории детально"""
+    model = Category
+    template_name = "categories_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoriesDetail, self).get_context_data(**kwargs)
+        context['questions'] = Question.objects.filter(categories=self.kwargs['pk']).order_by('-created_at')
+        return context

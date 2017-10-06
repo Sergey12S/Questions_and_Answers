@@ -6,7 +6,7 @@
 <br/>
 <h1>Популярные вопросы:</h1>
 {% for q in object_list %}
-    {{ q.category }} {{ q.author }} Рейтинг: {{ q.rating }}
+    {{ q.author }} Рейтинг: {{ q.rating }}
     <a href="{% url 'question_detail' pk=q.id %}">{{ q.title }}</a><br/>
 {% endfor %}
 
