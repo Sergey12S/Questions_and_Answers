@@ -2,35 +2,57 @@
 
 {% block title %}Все вопросы{% endblock %}
 
+{% block caption %}Список всех вопросов{% endblock %}
+
 {% block content %}
-    <h1>Список вопросов</h1><br/>
 
-    <form action="">
-        <!--{{ form }}-->
-        {{ form.errors }}
-        {{ form.search.label_tag }}
-        {{ form.search }}
-        {{ form.sort_field }}
-        <!--{{ form.sort_field.errors }}-->
-        <input type="submit">
-    </form><br/>
+    <div class="card-body">
+    <form action="" class="form-inline my-2 my-lg-0">
+        <input type="text" name="search" id="id_search" class="form-control mr-sm-2" placeholder="Поиск вопроса" />
+        <select name="sort_field" id="id_sort_field" class="custom-select">
+            <option value="-created_at">Новые</option>
+            <option value="created_at">Старые</option>
+            <option value="title">Заголовок</option>
+            <option value="-answers_count">Кол-во ответов</option>
+            <option value="-rating">Рейтинг</option>
+        </select>
+        <button type="submit" class="btn btn-outline-success">Искать</button>
+    </form>
+    </div>
 
+    <div class="col-sm-8">
     {% for question in object_list %}
-        <b>{{ question.created_at }}</b> {{ question.author }} Рейтинг: {{ question.rating }}
-        <a href="{% url 'question_detail' pk=question.id %}">{{ question.title }}</a>
-    Кол-во ответов: {{ question.answers_count }}<br/>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title" style="margin-top: -16px;">{{ question.title }}</h4>
+            <span class="card-text">Рейтинг: {{ question.rating }}</span>&nbsp;&nbsp;&nbsp;
+            <span class="card-text">Автор: {{ question.author }}</span>&nbsp;&nbsp;&nbsp;
+            <span class="card-text">Ответы: {{ question.answers_count }}</span>&nbsp;&nbsp;&nbsp;
+            <span class="card-text">Дата создания: {{ question.created_at }}</span>
+            <a href="{% url 'question_detail' pk=question.id %}" class="btn btn-success" style="float:right;margin-bottom:-20px;">Страница вопроса</a>
+          </div>
+        </div>
+      </div>
+    </div>
     {% endfor %}<br/>
+    </div>
 
-
+    <div class="card-body">
     {% if is_paginated %}
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
         {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}" style="color: black;">Предыдущая</a></li>
         {% endif %}
-            страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            <li class="page-item"><a class="page-link bg-light" href="#" style="color: black;">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</a></li>
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}" style="color: black;">Следующая</a></li>
         {% endif %}
+          </ul>
+        </nav>
     {% endif %}
-
+    </div>
 
 {% endblock %}

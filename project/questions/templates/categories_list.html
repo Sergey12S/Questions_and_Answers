@@ -2,10 +2,27 @@
 
 {% block title %}Все категории{% endblock %}
 
+{% block caption %}Категории{% endblock %}
+
 {% block content %}
-    <h2>Категории:</h2>
-    {% for c in object_list %}
-        <br/><a href="{% url 'categories_detail' pk=c.id %}">{{ c.name }}</a><br/>
-    {% endfor %}
+
+<div class="card-body">
+
+    <div class="row">
+
+        {% for c in object_list %}
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">{{ c.name }}</h4>
+                <a href="{% url 'categories_detail' pk=c.id %}" class="btn btn-success">Смотреть категорию</a>
+              </div>
+            </div><br/>
+          </div>
+        {% endfor %}
+
+    </div>
+
+</div>
 
 {% endblock %}

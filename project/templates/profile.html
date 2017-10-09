@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Ваш профиль{% endblock %}
+
+{% block caption %}Ваш профиль{% endblock %}
+
+{% block content %}
+
+<div class="card-body">
+
+    {% for user in object_list %}
+        <span>Ваш логин:</span><br/>
+        <span>{{ user.username }}</span><br/><br/>
+        <span>Ваш email адрес:</span><br/>
+        <span>{{ user.email }}</span>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

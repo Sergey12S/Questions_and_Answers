@@ -6,24 +6,38 @@ from .models import Answer
 
 
 class SignUpForm(UserCreationForm):
-
+    """Регистрация пользователя"""
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
 
-class AnswerAdd(forms.ModelForm):
+class AskQuestion(forms.ModelForm):
+    """Добавляет вопрос"""
+    class Meta:
+        model = Question
+        fields = ('title', 'text', 'categories')
 
+
+class UpdateQuestion(forms.ModelForm):
+    """Редактирует вопрос"""
+    class Meta:
+        model = Question
+        fields = ('title', 'text', 'categories')
+
+
+class AnswerAdd(forms.ModelForm):
+    """Добавление комментария к вопросу"""
     class Meta:
         model = Answer
         fields = ('text',)
 
 
 class QuestionListForm(forms.Form):
-
+    """Поиск и сортировка на странице всеъ вопросов"""
     search = forms.CharField(required=False)
-    sort_field = forms.ChoiceField(choices=(('-answers_count', u'Кол-во ответов'), ('-created_at', u'Новые'),
-                                            ('created_at', u'Старые'), ('title', u'Заголовок'),
+    sort_field = forms.ChoiceField(choices=(('-created_at', u'Новые'), ('created_at', u'Старые'),
+                                            ('title', u'Заголовок'), ('-answers_count', u'Кол-во ответов'),
                                             ('-rating', u'Рейтинг')), required=False)
 
     """

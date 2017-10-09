@@ -2,10 +2,29 @@
 
 {% block title %}{{ object.name }}{% endblock %}
 
+{% block caption %}Вопросы категории &nbsp; {{ object.name }}{% endblock %}
+
 {% block content %}
-    <h2>Вопросы:</h2>
-    {% for q in questions %}
-        <br/><a href="{% url 'question_detail' pk=q.id %}">{{ q.title }}</a><br/>
-    {% endfor %}
+
+    <div class="col-sm-8">
+
+        {% for q in questions %}
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title" style="margin-top: -16px;">{{ q.title }}</h4>
+                    <span class="card-text">Рейтинг: {{ q.rating }}</span>&nbsp;&nbsp;&nbsp;
+                    <span class="card-text">Автор: {{ q.author }}</span>&nbsp;&nbsp;&nbsp;
+                    <span class="card-text">Ответы: {{ q.answers_count }}</span>&nbsp;&nbsp;&nbsp;
+                    <span class="card-text">Дата создания: {{ q.created_at }}</span>
+                    <a href="{% url 'question_detail' pk=q.id %}" class="btn btn-success" style="float:right;margin-bottom:-20px;">Страница вопроса</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endfor %}
+
+    </div>
 
 {% endblock %}

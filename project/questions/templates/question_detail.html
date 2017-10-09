@@ -2,34 +2,34 @@
 
 {% block title %}{{ question.title }}{% endblock %}
 
+{% block caption %}Страница вопроса{% endblock %}
+
 {% block content %}
-    <h1>Вопрос</h1>
-    {% if request.user == question.author %}
-        <a href="{% url 'question_update' pk=question.id %}">Редактировать</a><br/>
-        <a href="{% url 'question_delete' pk=question.id %}">Удалить вопрос</a><br/>
-    {% endif %}<br/>
-    {{ question.title }}<br/>
-    {{ question.text }}<br/>
-    {{ question.author }}<br/>
-    {{ question.rating }}<br/><br/>
-    <p> Категории: <br/>
+    <div class="card-body">
+
+
+    <h1 style="text-align: center;">{{ question.title }}</h1><br/>
+    <span style="font-size: 16px;" class="badge badge-danger">Рейтинг вопроса: {{ question.rating }}</span><br/><br/>
+    <span>Текст вопроса:</span>
+    <div style="border: 1px solid black; padding: 10px;">{{ question.text }}</div><br/>
+
+    <p> Категории:
         {% for category in question.categories.all %}
-            <a href="{% url 'categories_detail' pk=category.id %}">{{ category }}</a><br/>
+            <a href="{% url 'categories_detail' pk=category.id %}" class="badge badge-success" style="font-size: 16px;">{{ category }}</a>
         {% endfor %}
-    </p><br/>
+    </p>
 
-    {% if request.user.is_authenticated %}
-    <h2>Добавить комментарий:</h2>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit">
-    </form>
-    {% else %} <h3>Для добавления комментария войдите в учетную запись!</h3>
-    {% endif %}
+    Автор: {{ question.author }}
 
-    <h2>Все комментарии:</h2>
-    <div id="comments">
+    <div>
+    {% if request.user == question.author %}
+        <a href="{% url 'question_update' pk=question.id %}">Редактировать</a>
+        <a href="{% url 'question_delete' pk=question.id %}">Удалить</a><br/>
+    {% endif %}<br/>
+    </div><br/>
+
+    <h2>Ответы:</h2><br/>
+    <div id="comments"><!-- НЕ ТРОГАТЬ!!!! КОММЕНТАРИИ! -->
 
     </div>
     <script>
@@ -38,4 +38,24 @@
         };
         window.setInterval(load_comments, 1000);
     </script>
+
+
+    <br/><br/>
+    {% if request.user.is_authenticated %}
+    <h2>Ответить:</h2><br/>
+
+    <form action="" method="post">
+        <div class="form-group col-md-6">
+        {% csrf_token %}
+        <label for="id_text">Напишите сюда ваш ответ:</label>
+        <textarea name="text" cols="40" required id="id_text" rows="9" class="form-control"></textarea><br/>
+        <button type="submit" class="btn btn-success">Отправить</button>
+        </div>
+    </form>
+
+    {% else %} <h3 style="text-decoration: underline;">Для добавления комментария войдите в свою учетную запись!</h3>
+    {% endif %}
+
+
+    </div>
 {% endblock %}

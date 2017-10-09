@@ -2,13 +2,19 @@
 
 {% block title %}Редактирование вопроса{% endblock %}
 
+{% block caption %}Редактируйте ваш вопрос{% endblock %}
+
 {% block content %}
+
+<div class="card-body">
 
     <form action="" method="post">
         {% csrf_token %}
-        {{ form.as_table }}
-        <input type="submit" value="Сохранить">
-        <a href="{% url 'question_detail' pk=question.id %}">Отмена</a>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <a href="{% url 'question_detail' pk=question.id %}" class="btn btn-success">Отмена</a>
     </form><br/>
+
+</div>
 
 {% endblock %}

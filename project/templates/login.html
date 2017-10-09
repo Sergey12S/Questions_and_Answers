@@ -2,12 +2,21 @@
 
 {% block title %}Войти{% endblock %}
 
+{% block caption %}Войдите в свою учетную запись{% endblock %}
+
 {% block content %}
+
+<div class="card-body">
 
     <form method="post">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit">
+        {{ form.username.label }}<br/>
+        {{ form.username }}<br/>
+        {{ form.password.label }}<br/>
+        {{ form.password }}<br/><br/>
+        <button type="submit" class="btn btn-success">Войти</button>
     </form>
+
+</div>
 
 {% endblock %}

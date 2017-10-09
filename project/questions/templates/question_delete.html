@@ -2,16 +2,23 @@
 
 {% block title %}Удаление вопроса{% endblock %}
 
+{% block caption %}Удаление вопроса{% endblock %}
+
 {% block content %}
-<h1>Вы действительно хотите удалить?</h1>
-    <p>
-        {{object.title}}
-    </p>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.as_table }}
-        <input type="submit" value="Да">
-        <a href="{% url 'question_detail' pk=question.id %}">Отмена</a>
-    </form><br/>
+
+<div class="card-body">
+
+    <h3>Вы действительно хотите удалить?</h3>
+        <p style="text-decoration: underline;">
+            {{object.title}}
+        </p>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <button type="submit" class="btn btn-success">Да</button>
+            <a href="{% url 'question_detail' pk=question.id %}" class="btn btn-success">Отмена</a>
+        </form><br/>
+
+</div>
 
 {% endblock %}

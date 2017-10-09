@@ -1,3 +1,13 @@
-    {% for answer in answers %}
-        {{ answer.text }}   {{ answer.author }}   {{ answer.created_at }}<br/>
-    {% endfor %}
+{% for answer in answers %}
+    <div class="card text-center">
+      <div class="card-header">
+        Автор: {{ answer.author }}
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ answer.text }}</p>
+      </div>
+      <div class="card-footer text-muted">
+        {{ answer.created_at }}
+      </div>
+    </div><br/>
+{% endfor %}

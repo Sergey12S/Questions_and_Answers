@@ -1,6 +1,6 @@
 from .models import Question, Answer, Category
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import QuestionListForm, SignUpForm, AnswerAdd
+from .forms import QuestionListForm, SignUpForm, AnswerAdd, AskQuestion, UpdateQuestion
 from django.shortcuts import resolve_url, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -19,7 +19,7 @@ class QuestionCreate(CreateView):
     """Страница создания вопроса"""
     model = Question
     template_name = "question_create.html"
-    fields = ('title', 'text', 'categories')
+    form_class = AskQuestion
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -33,7 +33,7 @@ class QuestionUpdate(UpdateView):
     """Страница изменения вопроса"""
     template_name = "question_update.html"
     model = Question
-    fields = ('categories', 'title', 'text')
+    form_class = UpdateQuestion
 
     def get_queryset(self):
         return super(QuestionUpdate, self).get_queryset().filter(author=self.request.user)
@@ -113,7 +113,7 @@ class Index(QuestionList):
     template_name = "index.html"
 
     def get_queryset(self):
-        return super(Index, self).get_queryset().exclude(rating__lt=10)
+        return super(Index, self).get_queryset().exclude(rating__lt=1).order_by('-rating')[:10]
 
 
 class CategoriesList(ListView):
@@ -134,7 +134,7 @@ class CategoriesDetail(DetailView):
 
 
 class QuestionCommentAjax(DetailView):
-    """"""
+    """Комментарии к вопросу"""
     model = Question
     template_name = "question_comment_ajax.html"
 
@@ -142,3 +142,12 @@ class QuestionCommentAjax(DetailView):
         context = super(QuestionCommentAjax, self).get_context_data(**kwargs)
         context['answers'] = Answer.objects.filter(question=self.kwargs['pk']).order_by('-created_at')
         return context
+
+
+class UserProfile(ListView):
+    """Страница профиля пользователя"""
+    model = User
+    template_name = "profile.html"
+
+    def get_queryset(self):
+        return super(UserProfile, self).get_queryset().filter(username=self.request.user)
