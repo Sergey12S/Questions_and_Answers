@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load widget_tweaks %}
+
 {% block title %}Задать вопрос{% endblock %}
 
 {% block caption %}Задайте свой вопрос{% endblock %}
@@ -38,4 +40,10 @@
 
     </div>
 
+    <script src="/static/jquery-3.2.1.js"></script>
+    <script src="/static/chosen.jquery.js"></script>
+
+    <script>
+        $('select').chosen();
+    </script>
 {% endblock %}

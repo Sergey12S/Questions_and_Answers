@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load widget_tweaks %}
+
 {% block title %}Редактирование вопроса{% endblock %}
 
 {% block caption %}Редактируйте ваш вопрос{% endblock %}
@@ -10,11 +12,23 @@
 
     <form action="" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        Заголовок:<br/>
+        {{ form.title|add_class:"form-control col-md-6" }}<br/>
+        Категории:<br/>
+        {{ form.categories|add_class:"form-control col-md-6" }}<br/><br/>
+        Текст вопроса:<br/>
+        {{ form.text|add_class:"form-control col-md-6" }}<br/>
         <button type="submit" class="btn btn-success">Сохранить</button>
         <a href="{% url 'question_detail' pk=question.id %}" class="btn btn-success">Отмена</a>
     </form><br/>
 
 </div>
+
+    <script src="/static/jquery-3.2.1.js"></script>
+    <script src="/static/chosen.jquery.js"></script>
+
+    <script>
+        $('select').chosen();
+    </script>
 
 {% endblock %}
