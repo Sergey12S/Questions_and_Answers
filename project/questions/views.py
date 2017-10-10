@@ -71,6 +71,11 @@ class QuestionDetail(DetailView):
              return redirect('question_detail', pk=question.pk)
         return super(QuestionDetail, self).dispatch(request, *args, **kwargs)
 
+    def get_queryset(self):
+        queryset = Question.objects.all()
+        queryset = queryset.annotate(answers_count=Count('answers__id'))
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super(QuestionDetail, self).get_context_data(**kwargs)
         context['answers'] = Answer.objects.filter(question=self.kwargs['pk']).order_by('-created_at')

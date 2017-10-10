@@ -28,7 +28,7 @@
     {% endif %}<br/>
     </div><br/>
 
-    <h2>Ответы:</h2><br/>
+    <span style="font-size: 16px;" class="badge badge-warning">Ответы: {{ question.answers_count }}</span><br/><br/>
     <div id="comments"><!-- НЕ ТРОГАТЬ!!!! КОММЕНТАРИИ! -->
 
     </div>
@@ -47,8 +47,7 @@
     <form action="" method="post">
         <div class="form-group col-md-6">
         {% csrf_token %}
-        <label for="id_text">Напишите сюда ваш ответ:</label>
-        <textarea name="text" cols="40" required id="id_text" rows="9" class="form-control"></textarea><br/>
+        <textarea name="text" cols="40" placeholder="Напишите сюда ваш ответ:" required id="id_text" rows="9" class="form-control"></textarea><br/>
         <button type="submit" class="btn btn-success">Отправить</button>
         </div>
     </form>
