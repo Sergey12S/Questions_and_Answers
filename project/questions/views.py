@@ -161,7 +161,7 @@ class CategoriesDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CategoriesDetail, self).get_context_data(**kwargs)
-        context['questions'] = Question.objects.filter(categories=self.kwargs['pk']).order_by('-created_at')
+        context['questions'] = Question.objects.filter(categories=self.kwargs['pk']).annotate(answers_count=Count('answers__id')).order_by('-created_at')
         return context
 
 
@@ -183,3 +183,8 @@ class UserProfile(ListView):
 
     def get_queryset(self):
         return super(UserProfile, self).get_queryset().filter(username=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserProfile, self).get_context_data(**kwargs)
+        context['questions_all'] = Question.objects.filter(author=self.request.user).annotate(answers_count=Count('answers__id')).order_by('-created_at')
+        return context
