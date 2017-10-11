@@ -1,8 +1,14 @@
 from django import forms
-from .models import Question
+from .models import Question, Answer, Like
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Answer
+
+
+class LikeForm(forms.ModelForm):
+    """Лайк"""
+    class Meta:
+        model = Like
+        fields = ('title',)
 
 
 class SignUpForm(UserCreationForm):

@@ -1,10 +1,10 @@
-from .models import Question, Answer, Category
+from .models import Question, Answer, Category, Like
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import QuestionListForm, SignUpForm, AnswerAdd, AskQuestion, UpdateQuestion
+from .forms import QuestionListForm, SignUpForm, AnswerAdd, AskQuestion, UpdateQuestion, LikeForm
 from django.shortcuts import resolve_url, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, F
 
 
 class SignUp(CreateView):
@@ -81,6 +81,33 @@ class QuestionDetail(DetailView):
         context['answers'] = Answer.objects.filter(question=self.kwargs['pk']).order_by('-created_at')
         context['form'] = self.form
         return context
+
+
+class QuestionLike(QuestionDetail):
+    """Лайк"""
+
+    def dispatch(self, request, *args, **kwargs):
+        question = Question.objects.get(pk=self.kwargs['pk'])
+        self.like = LikeForm(request.POST)
+        try:
+            all_likes = Like.objects.filter(question=question)  # Выборка всех лайков к этому вопросу
+            own = False
+            if all_likes.filter(author=request.user).exists():  # Ищет пользователя в авторах лайков к этому вопросу
+                own = True
+            if self.like.is_valid() and not own:  # Если пользователь еще не ставил лайк
+                l = self.like.save(commit=False)
+                l.author = request.user
+                l.question = question
+                l.save()
+                question.rating = F('rating') + 1
+                question.save()
+                question.likes.add(l)
+                return redirect('question_detail', pk=question.pk)
+            elif self.like.is_valid() and own:  # Если пользователь уже ставил лайк
+                return redirect('question_detail', pk=question.pk)
+        except:
+            return redirect('question_detail', pk=question.pk)
+        return super(QuestionDetail, self).dispatch(request, *args, **kwargs)
 
 
 class QuestionList(ListView):

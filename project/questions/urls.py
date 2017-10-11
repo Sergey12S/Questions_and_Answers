@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^categories/$', CategoriesList.as_view(), name='categories_list'),
     url(r'^categories/(?P<pk>\d+)/$', CategoriesDetail.as_view(), name='categories_detail'),
     url(r'^(?P<pk>\d+)/ajax/$', QuestionCommentAjax.as_view(), name='question_comments'),
+    url(r'^(?P<pk>\d+)/like/$', QuestionLike.as_view(), name='question_like'),
 ]

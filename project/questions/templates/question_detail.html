@@ -9,7 +9,15 @@
 
 
     <h1 style="text-align: center;">{{ question.title }}</h1><br/>
-    <span style="font-size: 16px;" class="badge badge-danger">Рейтинг вопроса: {{ question.rating }}</span><br/><br/>
+    <span style="font-size: 16px;" class="badge badge-danger">Рейтинг вопроса: {{ question.rating }}</span>
+    {% if user.is_authenticated %}
+    <form action="{% url 'question_like' pk=question.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">+1</button>
+    </form>
+    {% else %} <span style="font-size: 14px;">Для голосования войдите в свою учетную запись</span>
+    {% endif %}
+    <br/><br/>
     <span>Текст вопроса:</span>
     <div style="border: 1px solid black; padding: 10px;">{{ question.text }}</div><br/>
 
