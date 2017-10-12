@@ -1,10 +1,11 @@
 from .models import Question, Answer, Category, Like
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import QuestionListForm, SignUpForm, AnswerAdd, AskQuestion, UpdateQuestion, LikeForm
-from django.shortcuts import resolve_url, redirect
+from .forms import QuestionListForm, SignUpForm, AnswerAdd, AskQuestion, UpdateQuestion, LikeForm, ProfileForm
+from django.shortcuts import resolve_url, redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, F
+from django.contrib import messages
 
 
 class SignUp(CreateView):
@@ -85,7 +86,6 @@ class QuestionDetail(DetailView):
 
 class QuestionLike(QuestionDetail):
     """Лайк"""
-
     def dispatch(self, request, *args, **kwargs):
         question = Question.objects.get(pk=self.kwargs['pk'])
         self.like = LikeForm(request.POST)
@@ -188,3 +188,25 @@ class UserProfile(ListView):
         context = super(UserProfile, self).get_context_data(**kwargs)
         context['questions_all'] = Question.objects.filter(author=self.request.user).annotate(answers_count=Count('answers__id')).order_by('-created_at')
         return context
+
+
+@login_required
+def update_profile(request):
+    """Редактирование профиля"""
+    if request.method == 'POST':
+        user_form = SignUpForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Ваш профиль был успешно обновлен!')
+            return redirect('/index/')
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки.')
+    else:
+        user_form = SignUpForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+    return render(request, 'profile_edit.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })

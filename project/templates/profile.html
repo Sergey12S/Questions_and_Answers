@@ -9,11 +9,15 @@
 <div class="card-body">
 
     {% for user in object_list %}
+        <a href="/profile/update/">Вы можете изменить свой профиль и аватар.</a><br/>
+        <span>Ваш аватар:</span><br/>
+        <img style="border: solid 1px;" src="/media/{{ user.profile.avatar | default:'noavatar.png' }}" width="100px" height="100px"><br/><br/>
         <span>Ваш логин:</span><br/>
         <span>{{ user.username }}</span><br/><br/>
         <span>Ваш email адрес:</span><br/>
         <span>{{ user.email }}</span>
     {% endfor %}<br/><br/>
+
 
     <h2>Ваши вопросы:</h2><br/>
 

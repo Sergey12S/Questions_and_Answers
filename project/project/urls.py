@@ -16,14 +16,22 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import login, logout
-from questions.views import SignUp, Index, UserProfile
+from questions.views import SignUp, Index, UserProfile, update_profile
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$|index/', Index.as_view()),
+    url(r'^$|index/$', Index.as_view()),
     url(r'^questions/', include('questions.urls')),
-    url(r'^login/', login, {'template_name': 'login.html'}),
-    url(r'^logout/', logout),
-    url(r'^signup/', SignUp.as_view()),
-    url(r'^profile/', UserProfile.as_view()),
+    url(r'^login/$', login, {'template_name': 'login.html'}),
+    url(r'^logout/$', logout),
+    url(r'^signup/$', SignUp.as_view()),
+    url(r'^profile/$', UserProfile.as_view(), name="your_profile"),
+    url(r'^profile/update/$', update_profile),
 ]
+
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

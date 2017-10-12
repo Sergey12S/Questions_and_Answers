@@ -19,7 +19,14 @@
     {% endif %}
     <br/><br/>
     <span>Текст вопроса:</span>
-    <div style="border: 1px solid black; padding: 10px;">{{ question.text }}</div><br/>
+    <div style="border: 1px solid black; padding: 10px;">{{ question.text }}</div>
+
+    <div>
+    {% if request.user == question.author %}
+        <a href="{% url 'question_update' pk=question.id %}">Редактировать</a>
+        <a href="{% url 'question_delete' pk=question.id %}">Удалить</a><br/>
+    {% endif %}
+    </div>
 
     <p> Категории:
         {% for category in question.categories.all %}
@@ -27,14 +34,8 @@
         {% endfor %}
     </p>
 
-    Автор: {{ question.author }}
-
-    <div>
-    {% if request.user == question.author %}
-        <a href="{% url 'question_update' pk=question.id %}">Редактировать</a>
-        <a href="{% url 'question_delete' pk=question.id %}">Удалить</a><br/>
-    {% endif %}<br/>
-    </div><br/>
+    Автор: {{ question.author }}<br/>
+    <img style="border: solid 1px;" src="/media/{{ question.author.profile.avatar | default:'noavatar.png' }}" width="100px" height="100px"><br/><br/><br/>
 
     <span style="font-size: 16px;" class="badge badge-warning">Ответы: {{ question.answers_count }}</span><br/><br/>
     <div id="comments"><!-- НЕ ТРОГАТЬ!!!! КОММЕНТАРИИ! -->

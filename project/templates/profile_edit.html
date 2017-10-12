@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% block title %}Редактировать профиль{% endblock %}
+
+{% block caption %}Редактирование вашего профиля{% endblock %}
+
+{% block content %}
+
+<div class="card-body">
+
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+            Имя пользователя:<br/>
+            {{ user_form.username|add_class:"form-control col-md-6" }}<br/>
+            Email адрес:<br/>
+            {{ user_form.email|add_class:"form-control col-md-6" }}<br/>
+            Пароль:<br/>
+            {{ user_form.password1|add_class:"form-control col-md-6" }}<br/>
+            Подтверждение пароля:<br/>
+            {{ user_form.password2|add_class:"form-control col-md-6" }}<br/>
+            Аватар: (рекомендуется 100*100 px)<br/>
+            {{ profile_form.avatar }}<br/><br/>
+      <button type="submit" class="btn btn-success">Сохранить изменения</button>
+    </form>
+
+</div>
+
+{% endblock %}

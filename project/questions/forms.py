@@ -1,14 +1,8 @@
 from django import forms
-from .models import Question, Answer, Like
+from questions.models import Question, Answer, Like
+from user_change_app.models import Profile
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-
-
-class LikeForm(forms.ModelForm):
-    """Лайк"""
-    class Meta:
-        model = Like
-        fields = ('title',)
 
 
 class SignUpForm(UserCreationForm):
@@ -16,6 +10,20 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
+
+class ProfileForm(forms.ModelForm):
+    """Добавление аватара при регистрации"""
+    class Meta:
+        model = Profile
+        fields = ('avatar',)
+
+
+class LikeForm(forms.ModelForm):
+    """Лайк"""
+    class Meta:
+        model = Like
+        fields = ('title',)
 
 
 class AskQuestion(forms.ModelForm):
