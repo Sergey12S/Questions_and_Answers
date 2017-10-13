@@ -7,10 +7,10 @@ urlpatterns = [
     url(r'^$', QuestionList.as_view()),
     url(r'^(?P<pk>\d+)/$', QuestionDetail.as_view(), name='question_detail'),
     url(r'^create/$', login_required(QuestionCreate.as_view())),
-    url(r'^(?P<pk>\d+)/update/$', QuestionUpdate.as_view(), name='question_update'),
-    url(r'^(?P<pk>\d+)/delete/$', QuestionDelete.as_view(), name='question_delete'),
+    url(r'^(?P<pk>\d+)/update/$', login_required(QuestionUpdate.as_view()), name='question_update'),
+    url(r'^(?P<pk>\d+)/delete/$', login_required(QuestionDelete.as_view()), name='question_delete'),
     url(r'^categories/$', CategoriesList.as_view(), name='categories_list'),
     url(r'^categories/(?P<pk>\d+)/$', CategoriesDetail.as_view(), name='categories_detail'),
     url(r'^(?P<pk>\d+)/ajax/$', QuestionCommentAjax.as_view(), name='question_comments'),
-    url(r'^(?P<pk>\d+)/like/$', QuestionLike.as_view(), name='question_like'),
+    url(r'^(?P<pk>\d+)/like/$', login_required(QuestionLike.as_view()), name='question_like'),
 ]

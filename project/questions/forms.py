@@ -53,4 +53,3 @@ class QuestionListForm(forms.Form):
     sort_field = forms.ChoiceField(choices=(('-created_at', u'Новые'), ('created_at', u'Старые'),
                                             ('title', u'Заголовок'), ('-answers_count', u'Кол-во ответов'),
                                             ('-rating', u'Рейтинг')), required=False)
-

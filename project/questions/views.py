@@ -5,7 +5,6 @@ from django.shortcuts import resolve_url, redirect, render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, F
-from django.contrib import messages
 
 
 class SignUp(CreateView):
@@ -197,10 +196,7 @@ def update_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, 'Ваш профиль был успешно обновлен!')
             return redirect('/index/')
-        else:
-            messages.error(request, 'Пожалуйста, исправьте ошибки.')
     else:
         user_form = SignUpForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
