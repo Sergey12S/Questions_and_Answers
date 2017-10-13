@@ -54,17 +54,3 @@ class QuestionListForm(forms.Form):
                                             ('title', u'Заголовок'), ('-answers_count', u'Кол-во ответов'),
                                             ('-rating', u'Рейтинг')), required=False)
 
-    """
-    def clean_search(self):
-        search = self.cleaned_data.get('search')
-        raise forms.ValidationError(u'Я неправильный поиск!')
-        return search
-    """
-
-
-"""
-class QuesForm(forms.Form):
-
-    title = forms.CharField(max_length=255)
-    text = forms.CharField(widget=forms.Textarea)
-"""

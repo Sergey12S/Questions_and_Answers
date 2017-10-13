@@ -1,5 +1,5 @@
 from .models import Question, Answer, Category, Like
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .forms import QuestionListForm, SignUpForm, AnswerAdd, AskQuestion, UpdateQuestion, LikeForm, ProfileForm
 from django.shortcuts import resolve_url, redirect, render
 from django.contrib.auth.models import User
@@ -95,13 +95,13 @@ class QuestionLike(QuestionDetail):
             if all_likes.filter(author=request.user).exists():  # Ищет пользователя в авторах лайков к этому вопросу
                 own = True
             if self.like.is_valid() and not own:  # Если пользователь еще не ставил лайк
-                l = self.like.save(commit=False)
-                l.author = request.user
-                l.question = question
-                l.save()
+                q_like = self.like.save(commit=False)
+                q_like.author = request.user
+                q_like.question = question
+                q_like.save()
                 question.rating = F('rating') + 1
                 question.save()
-                question.likes.add(l)
+                question.likes.add(q_like)
                 return redirect('question_detail', pk=question.pk)
             elif self.like.is_valid() and own:  # Если пользователь уже ставил лайк
                 return redirect('question_detail', pk=question.pk)
@@ -119,11 +119,9 @@ class QuestionList(ListView):
     def dispatch(self, request, *args, **kwargs):
         self.form = QuestionListForm(request.GET)
         self.form.is_valid()
-        # self.qform = QuesForm(request.POST or None)
         return super(QuestionList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        # queryset = Question.objects.filter(author=self.request.user)Показывает вопросы залогиненого юзера
         queryset = Question.objects.all()
         if self.form.cleaned_data.get('search'):
             queryset = queryset.filter(title=self.form.cleaned_data['search'])
@@ -135,17 +133,17 @@ class QuestionList(ListView):
     def get_context_data(self, **kwargs):
         context = super(QuestionList, self).get_context_data(**kwargs)
         context['form'] = self.form
-        # context['qform'] = self.qform
         return context
 
 
-class Index(QuestionList):
+class Index(TemplateView):
     """Главная страница"""
-    model = Question
     template_name = "index.html"
 
-    def get_queryset(self):
-        return super(Index, self).get_queryset().exclude(rating__lt=1).order_by('-rating')[:10]
+    def get_context_data(self, **kwargs):
+        context = super(Index, self).get_context_data(**kwargs)
+        context['popular_questions'] = Question.objects.exclude(rating__lt=1).annotate(answers_count=Count('answers__id')).order_by('-rating')[:10]
+        return context
 
 
 class CategoriesList(ListView):
